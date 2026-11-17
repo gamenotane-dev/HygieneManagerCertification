@@ -165,6 +165,11 @@ export default function HomePage() {
               <br />
               {currentExam.heroDescription[1]}
             </p>
+            <p className="eh-desc mt-3">
+              問題演習・模試・学習コンテンツを無料で利用できます。
+              会員登録なしのゲスト利用にも対応しています。
+              利用開始時に確認操作が必要な場合があります。
+            </p>
             <nav className="eh-links" aria-label="主要ページ">
               {HERO_LINKS.map((link, index) => (
                 <span key={link.href}>
