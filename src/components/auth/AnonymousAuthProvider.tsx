@@ -11,7 +11,6 @@ import {
   useState,
 } from "react";
 import { InvisibleTurnstile } from "@/components/auth/InvisibleTurnstile";
-import { TurnstileScript } from "@/components/auth/TurnstileScript";
 import { TurnstileWidget } from "@/components/auth/TurnstileWidget";
 import { signInAnonymouslyAction } from "@/lib/actions/anonymous-auth";
 import { shouldSkipAnonymousAuth } from "@/lib/auth/anonymous";
@@ -79,13 +78,15 @@ export function AnonymousAuthProvider({
   }, [startChallenge]);
 
   useEffect(() => {
-    if (shouldSkipAnonymousAuth(pathname)) {
+    if (shouldSkipAnonymousAuth(pathname) || pathname === "/" || pathname === "/learn" || pathname.startsWith("/learn/")) {
+      fallbackStartedRef.current = false;
       setChallengeMode("idle");
       setStatus({ kind: "skipped" });
       return;
     }
 
     let cancelled = false;
+    setStatus({ kind: "checking" });
 
     async function checkSession() {
       const supabase = createClient();
@@ -152,7 +153,6 @@ export function AnonymousAuthProvider({
 
   return (
     <AnonymousAuthContext.Provider value={value}>
-      <TurnstileScript />
       {children}
       {challengeMode === "invisible" ? (
         <div className="fixed bottom-4 right-4 z-40">
